@@ -1,0 +1,20 @@
+{
+  "_comment_finding": "Finding #02: Overly Broad CSP connect-src / img-src (CWE-942)",
+  "_comment_severity": "Medium | CVSS v3.1: 5.3 (AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N)",
+  "_comment_category": "Client-side controls",
+  "_comment_what_was_wrong": "The CSP defined connect-src as 'self' https: wss: and img-src as https:. This wildcard scheme allowed malicious scripts (or XSS payload staging) to exfiltrate tokens, telemetry, or user state to arbitrary external HTTPS and WebSocket servers without restriction.",
+  "_comment_what_this_fix_does": "Replaces broad wildcard schemes (https:, wss:) in connect-src and img-src with an explicit domain allowlist including the API backend, telemetry ingestion endpoint (Sentry), and authorized map tile providers.",
+  "_comment_before": "connect-src 'self' https: wss:; img-src 'self' https: data: blob:;",
+  "_comment_after": "connect-src 'self' https://api.worldmonitor.app wss://api.worldmonitor.app https://*.ingest.sentry.io https://*.tile.openstreetmap.org https://api.mapbox.com; img-src 'self' data: blob: https://api.worldmonitor.app https://*.tile.openstreetmap.org https://api.mapbox.com https://avatars.githubusercontent.com;",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'nonce-wm-bootstrap' 'strict-dynamic'; connect-src 'self' https://api.worldmonitor.app wss://api.worldmonitor.app https://*.ingest.sentry.io https://*.tile.openstreetmap.org https://api.mapbox.com; img-src 'self' data: blob: https://api.worldmonitor.app https://*.tile.openstreetmap.org https://api.mapbox.com https://avatars.githubusercontent.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
+        }
+      ]
+    }
+  ]
+}

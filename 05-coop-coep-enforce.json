@@ -1,0 +1,30 @@
+{
+  "_comment_finding": "Finding #05: COOP/COEP Configured Only in Report-Only Mode",
+  "_comment_severity": "Low | CVSS v3.1: 3.1 (AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N)",
+  "_comment_category": "Client-side controls",
+  "_comment_what_was_wrong": "Cross-Origin-Opener-Policy and Cross-Origin-Embedder-Policy were deployed exclusively as '-Report-Only' headers. While useful for telemetry during rollout, they provide zero runtime isolation against Spectre/cross-origin window referencing attacks.",
+  "_comment_what_this_fix_does": "Transitions COOP to 'same-origin' and COEP to 'require-corp' (or 'credentialless') enforcing cross-origin isolation in production. Note: Verify CSP report metrics before switching to prevent breaking embedded third-party widgets without CORP headers.",
+  "_comment_before": {
+    "Cross-Origin-Opener-Policy-Report-Only": "same-origin; report-to=\"coop-endpoint\"",
+    "Cross-Origin-Embedder-Policy-Report-Only": "require-corp; report-to=\"coep-endpoint\""
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "same-origin"
+        }
+      ]
+    }
+  ]
+}

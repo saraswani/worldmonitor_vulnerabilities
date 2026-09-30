@@ -1,0 +1,20 @@
+{
+  "_comment_finding": "Finding #04: style-src 'unsafe-inline' Across All CSP Policies",
+  "_comment_severity": "Low-Medium | CVSS v3.1: 4.0 (AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:N/A:N)",
+  "_comment_category": "Client-side controls",
+  "_comment_what_was_wrong": "The application allowed style-src 'unsafe-inline' across all global and route-level headers. This exposes the application to CSS injection attacks, such as token exfiltration via CSS attribute selectors and unauthorized UI redress / phishing overlays.",
+  "_comment_what_this_fix_does": "Replaces style-src 'unsafe-inline' with nonce-based style execution or cryptographic SHA-256 hashes of critical inline stylesheet snippets, and provides configuration guidance for extracting remaining dynamic inline style tags into external CSS bundles.",
+  "_comment_before": "style-src 'self' 'unsafe-inline';",
+  "_comment_after": "style-src 'self' 'nonce-{{DYNAMIC_NONCE}}' https://fonts.googleapis.com;",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'nonce-{{DYNAMIC_NONCE}}' 'strict-dynamic'; style-src 'self' 'nonce-{{DYNAMIC_NONCE}}' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://api.worldmonitor.app; img-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
+        }
+      ]
+    }
+  ]
+}
